@@ -30,7 +30,7 @@ Resources:
           - Arn
       Description: handles sending emails to user
       FunctionName: sendEmailHandler
-      Handler: ../handlers/sample.handler.ts
+      Handler: sendEmail.handler
       Runtime: nodejs12.x
     DependsOn:
       - sendEmailHandlerServiceRoleD7E87A67

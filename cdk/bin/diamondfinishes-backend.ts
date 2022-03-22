@@ -4,7 +4,7 @@ import * as cdk from 'aws-cdk-lib';
 import { App, Stack, StackProps } from 'aws-cdk-lib';
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as aws_apigateway from "aws-cdk-lib/aws-apigateway";
-import { join } from "path";
+import { join, resolve } from "path";
 export class DiamondfinishesBackendStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -14,10 +14,13 @@ export class DiamondfinishesBackendStack extends Stack {
       runtime: lambda.Runtime.NODEJS_12_X,
       functionName: "sendEmailHandler",
       description: "handles sending emails to user",
-      handler: "../handlers/sample.handler.ts",
+      handler: "sendEmail.handler",
+      environment: {
+        // ENV vars go here
+      }
     });
 
-    new aws_apigateway.LambdaRestApi(this, "DiamondFinishesAPI", {
+    const api = new aws_apigateway.LambdaRestApi(this, "DiamondFinishesAPI", {
       description: "API Gateway for Diamond Finishes",
       restApiName: "Diamond Finishes API",
       handler: sendEmailHandler,
