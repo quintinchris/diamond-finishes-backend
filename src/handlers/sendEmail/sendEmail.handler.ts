@@ -2,7 +2,6 @@ import {
     Handler,
     APIGatewayProxyEvent,
     APIGatewayProxyResult,
-    Context,
   } from "aws-lambda";
   
   export const sendEmailHandler: Handler<

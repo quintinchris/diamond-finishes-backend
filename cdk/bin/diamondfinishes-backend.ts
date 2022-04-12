@@ -10,22 +10,25 @@ export class DiamondfinishesBackendStack extends Stack {
     super(scope, id, props);
 
     const sendEmailHandler = new lambda.Function(this, "sendEmailHandler", {
-      code: lambda.Code.fromAsset(join(__dirname, "../../handlers/sendEmail")),
+      code: lambda.Code.fromAsset(join(__dirname, "../../src/handlers/sendEmail")),
       runtime: lambda.Runtime.NODEJS_12_X,
       functionName: "sendEmailHandler",
       description: "handles sending emails to user",
       handler: "sendEmail.handler",
-      environment: {
-        // ENV vars go here
-      }
+      // environment: {
+      //   // ENV vars go here
+      // }
     });
 
     const api = new aws_apigateway.LambdaRestApi(this, "DiamondFinishesAPI", {
       description: "API Gateway for Diamond Finishes",
       restApiName: "Diamond Finishes API",
       handler: sendEmailHandler,
-      cloudWatchRole: true
+      cloudWatchRole: true,
+      proxy: false
     });
+
+    api.root.addResource("sendEmail").addMethod("POST", new aws_apigateway.LambdaIntegration(sendEmailHandler));
   }
 }
 

@@ -31,8 +31,11 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
+    "@types/js-yaml": "^4.0.5",
     "aws-cdk-lib": "2.15.0",
+    "aws-lambda": "^1.0.7",
     "constructs": "^10.0.0",
+    "fork-ts-checker-webpack-plugin": "^7.2.3",
     "source-map-support": "^0.5.16",
     "ts-loader": "^9.2.8",
     "yaml-cfn": "^0.3.1"

@@ -1,6 +1,7 @@
 import { readFileSync } from "fs";
 import { yamlParse } from "yaml-cfn";
 import { getLambdasFromTemplate } from "./src/utils/getLambdasFromTemplate";
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 import { webpack } from "webpack";
 import * as path from "path";
 
@@ -13,7 +14,9 @@ const entries = getLambdasFromTemplate(Resources);
 const config = {
   entry: entries,
   output: {
-    libraryTarget: "commonjs2",
+    library: {
+      type: "commonjs2",
+    },
     path: path.resolve(__dirname, "build"),
     filename: "[name].js",
   },
@@ -21,16 +24,22 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.ts(x)?$/,
-        loader: "ts-loader",
-        include: path.resolve(__dirname, "/src/handlers"),
-        exclude: ["/node_modules/", "/src/samBundler/", "/src/cdk" ],
+        test: /\.ts$/,
+        loader: 'ts-loader',
+        include: path.resolve(__dirname, "/src"),
+        exclude: path.resolve(__dirname, "/node_modules/"),
+        options: {
+          // disable type checker - we will use it in fork plugin
+          transpileOnly: true
+        }
       },
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js", ".json"],
+    extensions: [".ts", ".js", ".json"],
   },
+  mode: process.env.NODE_ENV === "dev" ? "development" : "production",
+  plugins: [new ForkTsCheckerWebpackPlugin()]
 };
 
 module.exports = config;

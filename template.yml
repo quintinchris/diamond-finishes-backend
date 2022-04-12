@@ -75,16 +75,15 @@ Resources:
       - DiamondFinishesAPI2DEAC26E
     Metadata:
       aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Account
-  DiamondFinishesAPIDeployment9B35F797333e786c8c5580e6cb0e30381b510a1a:
+  DiamondFinishesAPIDeployment9B35F79783dbdf2ea6a50e57b213874eb7a671f9:
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId:
         Ref: DiamondFinishesAPI2DEAC26E
       Description: Automatically created by the RestApi construct
     DependsOn:
-      - DiamondFinishesAPIproxyANY42CB169E
-      - DiamondFinishesAPIproxy9AD4ED05
-      - DiamondFinishesAPIANY259AB345
+      - DiamondFinishesAPIsendEmailPOST3031BF26
+      - DiamondFinishesAPIsendEmailDCFDEECB
     Metadata:
       aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Deployment/Resource
   DiamondFinishesAPIDeploymentStageprod6E0DB9B4:
@@ -93,25 +92,25 @@ Resources:
       RestApiId:
         Ref: DiamondFinishesAPI2DEAC26E
       DeploymentId:
-        Ref: DiamondFinishesAPIDeployment9B35F797333e786c8c5580e6cb0e30381b510a1a
+        Ref: DiamondFinishesAPIDeployment9B35F79783dbdf2ea6a50e57b213874eb7a671f9
       StageName: prod
     DependsOn:
       - DiamondFinishesAPIAccount87D50414
     Metadata:
       aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/DeploymentStage.prod/Resource
-  DiamondFinishesAPIproxy9AD4ED05:
+  DiamondFinishesAPIsendEmailDCFDEECB:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId:
         Fn::GetAtt:
           - DiamondFinishesAPI2DEAC26E
           - RootResourceId
-      PathPart: "{proxy+}"
+      PathPart: sendEmail
       RestApiId:
         Ref: DiamondFinishesAPI2DEAC26E
     Metadata:
-      aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Default/{proxy+}/Resource
-  DiamondFinishesAPIproxyANYApiPermissionDiamondfinishesBackendStackDiamondFinishesAPI24FD4D4EANYproxyC7F3B570:
+      aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Default/sendEmail/Resource
+  DiamondFinishesAPIsendEmailPOSTApiPermissionDiamondfinishesBackendStackDiamondFinishesAPI24FD4D4EPOSTsendEmailAF862006:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
@@ -133,10 +132,10 @@ Resources:
             - Ref: DiamondFinishesAPI2DEAC26E
             - /
             - Ref: DiamondFinishesAPIDeploymentStageprod6E0DB9B4
-            - /*/*
+            - /POST/sendEmail
     Metadata:
-      aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Default/{proxy+}/ANY/ApiPermission.DiamondfinishesBackendStackDiamondFinishesAPI24FD4D4E.ANY..{proxy+}
-  DiamondFinishesAPIproxyANYApiPermissionTestDiamondfinishesBackendStackDiamondFinishesAPI24FD4D4EANYproxy865FDB4D:
+      aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Default/sendEmail/POST/ApiPermission.DiamondfinishesBackendStackDiamondFinishesAPI24FD4D4E.POST..sendEmail
+  DiamondFinishesAPIsendEmailPOSTApiPermissionTestDiamondfinishesBackendStackDiamondFinishesAPI24FD4D4EPOSTsendEmailF61C7180:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
@@ -156,15 +155,15 @@ Resources:
             - Ref: AWS::AccountId
             - ":"
             - Ref: DiamondFinishesAPI2DEAC26E
-            - /test-invoke-stage/*/*
+            - /test-invoke-stage/POST/sendEmail
     Metadata:
-      aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Default/{proxy+}/ANY/ApiPermission.Test.DiamondfinishesBackendStackDiamondFinishesAPI24FD4D4E.ANY..{proxy+}
-  DiamondFinishesAPIproxyANY42CB169E:
+      aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Default/sendEmail/POST/ApiPermission.Test.DiamondfinishesBackendStackDiamondFinishesAPI24FD4D4E.POST..sendEmail
+  DiamondFinishesAPIsendEmailPOST3031BF26:
     Type: AWS::ApiGateway::Method
     Properties:
-      HttpMethod: ANY
+      HttpMethod: POST
       ResourceId:
-        Ref: DiamondFinishesAPIproxy9AD4ED05
+        Ref: DiamondFinishesAPIsendEmailDCFDEECB
       RestApiId:
         Ref: DiamondFinishesAPI2DEAC26E
       AuthorizationType: NONE
@@ -184,87 +183,11 @@ Resources:
                   - Arn
               - /invocations
     Metadata:
-      aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Default/{proxy+}/ANY/Resource
-  DiamondFinishesAPIANYApiPermissionDiamondfinishesBackendStackDiamondFinishesAPI24FD4D4EANYCE060A1A:
-    Type: AWS::Lambda::Permission
-    Properties:
-      Action: lambda:InvokeFunction
-      FunctionName:
-        Fn::GetAtt:
-          - sendEmailHandlerA44844D3
-          - Arn
-      Principal: apigateway.amazonaws.com
-      SourceArn:
-        Fn::Join:
-          - ""
-          - - "arn:"
-            - Ref: AWS::Partition
-            - ":execute-api:"
-            - Ref: AWS::Region
-            - ":"
-            - Ref: AWS::AccountId
-            - ":"
-            - Ref: DiamondFinishesAPI2DEAC26E
-            - /
-            - Ref: DiamondFinishesAPIDeploymentStageprod6E0DB9B4
-            - /*/
-    Metadata:
-      aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Default/ANY/ApiPermission.DiamondfinishesBackendStackDiamondFinishesAPI24FD4D4E.ANY..
-  DiamondFinishesAPIANYApiPermissionTestDiamondfinishesBackendStackDiamondFinishesAPI24FD4D4EANYE0C4393C:
-    Type: AWS::Lambda::Permission
-    Properties:
-      Action: lambda:InvokeFunction
-      FunctionName:
-        Fn::GetAtt:
-          - sendEmailHandlerA44844D3
-          - Arn
-      Principal: apigateway.amazonaws.com
-      SourceArn:
-        Fn::Join:
-          - ""
-          - - "arn:"
-            - Ref: AWS::Partition
-            - ":execute-api:"
-            - Ref: AWS::Region
-            - ":"
-            - Ref: AWS::AccountId
-            - ":"
-            - Ref: DiamondFinishesAPI2DEAC26E
-            - /test-invoke-stage/*/
-    Metadata:
-      aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Default/ANY/ApiPermission.Test.DiamondfinishesBackendStackDiamondFinishesAPI24FD4D4E.ANY..
-  DiamondFinishesAPIANY259AB345:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      HttpMethod: ANY
-      ResourceId:
-        Fn::GetAtt:
-          - DiamondFinishesAPI2DEAC26E
-          - RootResourceId
-      RestApiId:
-        Ref: DiamondFinishesAPI2DEAC26E
-      AuthorizationType: NONE
-      Integration:
-        IntegrationHttpMethod: POST
-        Type: AWS_PROXY
-        Uri:
-          Fn::Join:
-            - ""
-            - - "arn:"
-              - Ref: AWS::Partition
-              - ":apigateway:"
-              - Ref: AWS::Region
-              - :lambda:path/2015-03-31/functions/
-              - Fn::GetAtt:
-                  - sendEmailHandlerA44844D3
-                  - Arn
-              - /invocations
-    Metadata:
-      aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Default/ANY/Resource
+      aws:cdk:path: DiamondfinishesBackendStack/DiamondFinishesAPI/Default/sendEmail/POST/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/1WQ0U7DMAxFv4X31DAmxHM3tCemTeUDpiw1xWuTVLXDqKr+O0kKYjz53GvZ18kjrJ7g4U5fuTB1W3R0hulNtGlVtE5Tp+251jDtgjNC3qntu7vlIw6WmKOaFWkLU+U7TI1UZ8Xrk2ZGYShTiRo2wbQoG82odE+NFrzqEabXHFQhS9lTXvCHpTE+OFEv2Hd+tBgxujcqHtzk1AXiqA+DwRxyHPzX+Ov8LF54j/Lh62QtNM8qX5mWkGtS4xCkD/JvKvLWu5okv9n5GuHC95+rZ1jHf7wwUTHEY8kiVEv9BgtoagdjAQAA
+      Analytics: v2:deflate64:H4sIAAAAAAAA/1WQ0U7DMAxFv4X31DAmxHM3tCemofIBU5aa4rVJqtphmqL+O0kKYjz5XFvX18kjrJ7g4U5fuDJtXw10gvgu2vQqtY5x0PbUaoi74IyQd2r74W75DSdLzEnNirSF2PgB8yDXWfH6qJlRGOpckoZNMD3KRjMqPVKnBS/6CvG1BDXIUo9UFvxhbYwPTtQLjoO/WkyYujcqHdyV1AWS1YfJYAn5FT87F96jfPo2txaaZ1UOzH5yXR4cgoxB/rkSb71rScpznW8Rznz/tXqGdfrCMxNVU7qTLEKz1G+JUjwjXgEAAA==
     Metadata:
       aws:cdk:path: DiamondfinishesBackendStack/CDKMetadata/Default
     Condition: CDKMetadataAvailable
